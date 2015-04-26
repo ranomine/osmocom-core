@@ -107,14 +107,10 @@ TimerScheduler >> fireTimers: now [
 
 	"Only this process will remove items, this is why we can check isEmpty
 	 without having the lock"
-	[queue isEmpty or: [queue first timeout > now]] whileFalse: 
-		[| each |
+	[queue isEmpty or: [queue first timeout > now]] whileFalse:  [| each |
 		each := sem critical: [queue removeFirst].
-		each isCanceled 
-		    ifFalse: 
-			[[each fire] on: Error
-			    do: 
-				[:e | 
+		each isCanceled ifFalse: [
+			[each fire] on: Error do: [:e | 
 				e logException: 'Execution of timer failed: ' , e messageText area: #timer]]]
 
 ]
