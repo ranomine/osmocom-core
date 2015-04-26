@@ -15,7 +15,8 @@ Class {
 		'quit',
 		'processExited',
 		'delay',
-		'loopSem'
+		'loopSem',
+		'errorHandlers'
 	],
 	#category : #'OsmoCore-Timer'
 }
@@ -60,6 +61,11 @@ TimerScheduler class >> shutDown: quitting [
 TimerScheduler class >> startUp [
 	Smalltalk at: #OsmoTimeScheduler ifPresent: [:timer | timer doStartUp]
 
+]
+
+{ #category : #'as yet unclassified' }
+TimerScheduler >> addErrorHandler: anErrorHandler [ 
+	errorHandlers add: anErrorHandler
 ]
 
 { #category : #'delay_loop' }
@@ -107,12 +113,11 @@ TimerScheduler >> fireTimers: now [
 
 	"Only this process will remove items, this is why we can check isEmpty
 	 without having the lock"
-	[queue isEmpty or: [queue first timeout > now]] whileFalse:  [| each |
-		each := sem critical: [queue removeFirst].
-		each isCanceled ifFalse: [
-			[each fire] on: Error do: [:e | 
-				e logException: 'Execution of timer failed: ' , e messageText area: #timer]]]
-
+	[queue isEmpty or: [queue first timeout > now]] whileFalse:  [| timer |
+		timer := sem critical: [queue removeFirst].
+		timer isCanceled ifFalse: [
+			[timer fire] on: Error do: [:error |
+				errorHandlers do: [ :each | each handleTimerError: error on: timer]]]].
 ]
 
 { #category : #private }
@@ -120,6 +125,7 @@ TimerScheduler >> initialize [
 	queue := SortedCollection sortBlock: [:a :b | a timeout < b timeout].
 	sem := Semaphore forMutualExclusion.
 	quit := false.
+	errorHandlers := OrderedCollection initWith: OsmoLogErrorHandler new.
 	self startLoop
 
 ]

@@ -7,7 +7,8 @@ Class {
 	#instVars : [
 		'queue',
 		'dispatch',
-		'quit'
+		'quit',
+		'errorHandlers'
 	],
 	#category : #'OsmoCore-Core'
 }
@@ -46,6 +47,11 @@ Dispatcher class >> new [
 ]
 
 { #category : #'as yet unclassified' }
+Dispatcher >> addErrorHandler: anErrorHandler [ 
+	errorHandlers add: anErrorHandler
+]
+
+{ #category : #'as yet unclassified' }
 Dispatcher >> dispatch [
 	| block sem |
 	block := queue next.
@@ -58,7 +64,7 @@ Dispatcher >> dispatch [
 	[
 		[
 			block on: Error do:  [:error | 
-				error logException: 'dispatch failed on "' , block printString , '".' area: #core]
+				errorHandlers do: [:each | each handleError: error on: block ]]
 		]  ensure: [sem signal]
 	] fork.
 	sem wait
@@ -68,6 +74,12 @@ Dispatcher >> dispatch [
 Dispatcher >> dispatchBlock: aBlock [
 	queue nextPut: aBlock
 
+]
+
+{ #category : #'as yet unclassified' }
+Dispatcher >> initialize [
+	super initialize.
+	errorHandlers := OrderedCollection with: OsmoLogErrorHandler new
 ]
 
 { #category : #private }
