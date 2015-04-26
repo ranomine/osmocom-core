@@ -125,7 +125,7 @@ TimerScheduler >> initialize [
 	queue := SortedCollection sortBlock: [:a :b | a timeout < b timeout].
 	sem := Semaphore forMutualExclusion.
 	quit := false.
-	errorHandlers := OrderedCollection initWith: OsmoLogErrorHandler new.
+	errorHandlers := OrderedCollection with: OsmoLogErrorHandler new.
 	self startLoop
 
 ]
