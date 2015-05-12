@@ -114,6 +114,7 @@ ConfigurationOfOsmoCore >> baseline01: spec [
 
 	spec for: #'common' do: [
 		spec blessing: #'baseline'.
+		spec repository: 'http://smalltalkhub.com/mc/osmocom/Core/main/'.
 		spec 
 			project: 'OsmoLogging' with: [
 				spec
@@ -123,7 +124,7 @@ ConfigurationOfOsmoCore >> baseline01: spec [
 			project: 'OsmoCrashReportClient' with: [
 				spec
 					className: #ConfigurationOfOsmoCrashReportClient;
-					versionString: #'stable';
+					versionString: #'bleedingEdge';
 					repository: 'http://smalltalkhub.com/mc/osmocom/OsmoCrashReport/main/' ];
 			project: 'RFB' with: [
 				spec
@@ -132,7 +133,7 @@ ConfigurationOfOsmoCore >> baseline01: spec [
 					repository: 'http://smalltalkhub.com/mc/PharoExtras/RFB/main/' ].
 		spec package: #OsmoCore with: [
 				spec requires: #('OsmoLogging' ). ].
-		spec group: 'default' with: #(#OsmoCore #RFB 'OsmoCrashReportClient'). ].
+		spec group: 'default' with: #(#OsmoCore #RFB 'OsmoCrashReportClient' ). ].
 
 ]
 
