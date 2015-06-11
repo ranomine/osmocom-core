@@ -18,6 +18,25 @@ DispatcherTest >> testDispatcher [
 ]
 
 { #category : #'as yet unclassified' }
+DispatcherTest >> testPendingBlocks [
+	| sem dispatcher |
+	dispatcher := Dispatcher new.
+	dispatcher startDispatching.
+
+	sem := Semaphore new.
+	self assert: sem signals equals: 0.
+	self assert: dispatcher pendingBlocks equals: 0.
+	dispatcher dispatchBlock: [sem wait].
+	dispatcher dispatchBlock: [ ].
+
+	"Verify that one block is pending"
+	self assert: dispatcher pendingBlocks equals: 1.
+	sem signal.
+	dispatcher quit.
+
+]
+
+{ #category : #'as yet unclassified' }
 DispatcherTest >> testSameDispatcher [
 	self assert: Dispatcher instance == Dispatcher instance
 

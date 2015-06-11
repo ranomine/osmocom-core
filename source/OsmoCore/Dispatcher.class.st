@@ -82,6 +82,17 @@ Dispatcher >> initialize [
 	errorHandlers := OrderedCollection with: OsmoLogErrorHandler new
 ]
 
+{ #category : #'as yet unclassified' }
+Dispatcher >> pendingBlocks [
+	^queue size
+]
+
+{ #category : #'as yet unclassified' }
+Dispatcher >> quit [
+	queue nextPut: [].
+	quit := true.
+]
+
 { #category : #private }
 Dispatcher >> startDispatching [
 	quit := false.
