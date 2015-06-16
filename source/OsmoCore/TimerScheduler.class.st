@@ -79,7 +79,7 @@ TimerScheduler >> doShutDown [
 	loop ifNil: [^self].
 	quit := true.
 	sem critical: [loopSem ifNotNil: [loopSem signal]].
-	delay ifNotNil: [:the_delay | the_delay signalWaitingProcess].
+	self signalWaitingProcessOf: delay.
 	processExited wait.
 	Transcript
 	    nextPutAll: 'Stopped the TimerScheduler process';
@@ -188,8 +188,18 @@ TimerScheduler >> scheduleInSeconds: aNumber block: aBlock [
 TimerScheduler >> signalDelay [
 	"Called with sem critical being consumed"
 
-	delay ifNotNil: [delay signalWaitingProcess]
+	self signalWaitingProcessOf: delay
+]
 
+{ #category : #PharoHacks }
+TimerScheduler >> signalWaitingProcessOf: aDelay [
+	"process signalling process of the delay. Try to figure out which method to call for. The
+	selector has changed between pharo3 and pharo4"
+	aDelay ifNil: [ ^ self ].
+	
+	(aDelay respondsTo: #signalWaitingProcess)
+		ifTrue: [  aDelay signalWaitingProcess ]
+		ifFalse: [ aDelay schedulerSignalWaitingProcess ]
 ]
 
 { #category : #creation }
