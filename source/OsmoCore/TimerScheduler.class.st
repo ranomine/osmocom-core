@@ -70,7 +70,12 @@ TimerScheduler >> addErrorHandler: anErrorHandler [
 
 { #category : #'delay_loop' }
 TimerScheduler >> dispatchTimers [
-	OsmoDispatcher dispatchBlock: [self fireTimers: DateAndTime now]
+	| timers |
+	timers := self expiredTimers: DateAndTime now.
+	OsmoDispatcher dispatchBlock: [
+		timers do: [:timer |
+				[timer fire] on: Error do: [:error |
+					errorHandlers do: [ :each | each handleTimerError: error on: timer]]]].
 
 ]
 
@@ -98,14 +103,9 @@ TimerScheduler >> doStartUp [
 
 ]
 
-{ #category : #private }
-TimerScheduler >> finalize [
-	quit := true
-
-]
-
-{ #category : #private }
-TimerScheduler >> fireTimers: now [
+{ #category : #'as yet unclassified' }
+TimerScheduler >> expiredTimers: now [
+	| res |
 	"Now execute the timers. One way or another this is crazy. If we have
 	 a long blocking application or a deadlock the timer queue will get
 	 stuck. But if we run this in a new process a later process might be run
@@ -113,11 +113,19 @@ TimerScheduler >> fireTimers: now [
 
 	"Only this process will remove items, this is why we can check isEmpty
 	 without having the lock"
+	res := OrderedCollection new.
+		
 	[queue isEmpty or: [queue first timeout > now]] whileFalse:  [| timer |
 		timer := sem critical: [queue removeFirst].
 		timer isCanceled ifFalse: [
-			[timer fire] on: Error do: [:error |
-				errorHandlers do: [ :each | each handleTimerError: error on: timer]]]].
+			res add: timer]].
+	^res
+]
+
+{ #category : #private }
+TimerScheduler >> finalize [
+	quit := true
+
 ]
 
 { #category : #private }
