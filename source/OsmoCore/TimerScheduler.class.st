@@ -15,8 +15,7 @@ Class {
 		'quit',
 		'processExited',
 		'delay',
-		'loopSem',
-		'errorHandlers'
+		'loopSem'
 	],
 	#category : #'OsmoCore-Timer'
 }
@@ -63,19 +62,14 @@ TimerScheduler class >> startUp [
 
 ]
 
-{ #category : #'as yet unclassified' }
-TimerScheduler >> addErrorHandler: anErrorHandler [ 
-	errorHandlers add: anErrorHandler
-]
-
 { #category : #'delay_loop' }
 TimerScheduler >> dispatchTimers [
 	| timers |
 	timers := self expiredTimers: DateAndTime now.
 	OsmoDispatcher dispatchBlock: [
 		timers do: [:timer |
-				[timer fire] on: Error do: [:error |
-					errorHandlers do: [ :each | each handleTimerError: error on: timer]]]].
+			ModuleBoundary runSynchronous: [timer fire]]].
+
 
 ]
 
@@ -133,7 +127,6 @@ TimerScheduler >> initialize [
 	queue := SortedCollection sortBlock: [:a :b | a timeout < b timeout].
 	sem := Semaphore forMutualExclusion.
 	quit := false.
-	errorHandlers := OrderedCollection with: OsmoLogErrorHandler new.
 	self startLoop
 
 ]

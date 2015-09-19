@@ -13,8 +13,7 @@ Class {
 OsmoDebugErrorHandler class >> install [
 	| handler |
 	handler := self new.
-	Dispatcher instance addErrorHandler: handler.
-	TimerScheduler instance addErrorHandler: handler.
+	ModuleBoundary addErrorHandler: handler.
 ]
 
 { #category : #'as yet unclassified' }
