@@ -28,6 +28,9 @@ ModuleBoundary class >> initialize [
 ModuleBoundary class >> runSynchronous: aBlock [
 
 	"Execute aBlock, catch _all_ Errors and invoke the error handlers"
-	aBlock on: Exception do:  [:error |
+	"Ignore Notifications, IllegalResumeAttempt, SimulationExceptionWrapper,
+	MockExceptionWithPassAction, TestSkip, MCNoChangesException. We should
+	not care about notifications so we can not catch Exception"
+	aBlock on: Error, Abort, UnhandledError, TestFailure, Halt, Exit do:  [:error |
 		errorHandlers do: [:each | each handleError: error on: aBlock]].
 ]
