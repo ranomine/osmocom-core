@@ -20,8 +20,3 @@ OsmoDebugErrorHandler class >> install [
 OsmoDebugErrorHandler >> handleError: anError on: block [ 
 	UIManager default unhandledErrorDefaultAction: anError.
 ]
-
-{ #category : #'as yet unclassified' }
-OsmoDebugErrorHandler >> handleTimerError: anError on: block [
-	UIManager default unhandledErrorDefaultAction: anError.
-]
