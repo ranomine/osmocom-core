@@ -6,15 +6,19 @@ Class {
 
 { #category : #'as yet unclassified' }
 DispatcherTest >> testDispatcher [
-	| sem |
-	sem := Semaphore new.
-	self assert: sem signals = 0.
-	"Force a debugger or some abortion? And a log message"
-	OsmoDispatcher dispatchBlock: [123 unknownMessageForSmallInteger].
-	OsmoDispatcher dispatchBlock: [Processor activeProcess terminate].
-	OsmoDispatcher dispatchBlock: [sem signal].
-	self assert: sem signals = 1
+	| sem dispatcher |
 
+	dispatcher := Dispatcher new.
+	dispatcher startDispatching.
+
+	sem := Semaphore new.
+	self assert: sem signals equals: 0.
+	"Force a debugger or some abortion? And a log message"
+	dispatcher dispatchBlock: [123 unknownMessageForSmallInteger].
+	dispatcher dispatchBlock: [Processor activeProcess terminate].
+	dispatcher dispatchBlock: [sem signal].
+	self assert: sem signals equals: 1.
+	dispatcher quit.
 ]
 
 { #category : #'as yet unclassified' }
