@@ -137,6 +137,35 @@ ConfigurationOfOsmoCore >> baseline01: spec [
 
 ]
 
+{ #category : #baselines }
+ConfigurationOfOsmoCore >> baseline02: spec [
+	<version: '0.2-baseline'>
+
+	spec for: #'common' do: [
+		spec blessing: #'baseline'.
+		spec repository: 'http://smalltalkhub.com/mc/osmocom/Core/main/'.
+		spec 
+			project: 'OsmoLogging' with: [
+				spec
+					className: #ConfigurationOfOsmoLogging;
+					versionString: #'bleedingEdge';
+					repository: 'http://smalltalkhub.com/mc/osmocom/Logging/main/' ];
+			project: 'OsmoCrashReportClient' with: [
+				spec
+					className: #ConfigurationOfOsmoCrashReportClient;
+					versionString: #'bleedingEdge';
+					repository: 'http://smalltalkhub.com/mc/osmocom/OsmoCrashReport/main/' ];
+			project: 'RFB' with: [
+				spec
+					className: #ConfigurationOfRFB;
+					versionString: #'stable';
+					repository: 'http://smalltalkhub.com/mc/PharoExtras/RFB/main/' ].
+		spec package: #OsmoCore with: [
+				spec requires: #('OsmoLogging' 'OsmoCrashReportClient' ). ].
+		spec group: 'default' with: #(#OsmoCore #RFB 'OsmoCrashReportClient' ). ].
+
+]
+
 { #category : #accessing }
 ConfigurationOfOsmoCore >> customProjectAttributes [
 	 "Edit to return a collection of any custom attributes e.g. for conditional loading: Array with: #'Condition1' with: #'Condition2.
@@ -149,7 +178,7 @@ ConfigurationOfOsmoCore >> customProjectAttributes [
 ConfigurationOfOsmoCore >> development: spec [
 	<symbolicVersion: #'development'>
 
-	spec for: #'common' version: '0.1-baseline'.
+	spec for: #'common' version: '0.2-baseline'.
 
 ]
 
