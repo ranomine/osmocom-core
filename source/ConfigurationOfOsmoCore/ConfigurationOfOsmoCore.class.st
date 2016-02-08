@@ -165,3 +165,28 @@ ConfigurationOfOsmoCore >> project [
 		project loadType: #linear. "change to #atomic if desired"
 		project ]
 ]
+
+{ #category : #'symbolic versions' }
+ConfigurationOfOsmoCore >> stable: spec [
+	<symbolicVersion: #'stable'>
+
+	spec for: #'common' version: '1'.
+
+]
+
+{ #category : #versions }
+ConfigurationOfOsmoCore >> version1: spec [
+	<version: '1' imports: #('0.1-baseline' )>
+
+	spec for: #'common' do: [
+		spec blessing: #'stable'.
+		spec description: 'version 1'.
+		spec author: 'HolgerHansPeterFreyther'.
+		spec timestamp: '2/8/2016 11:50'.
+		spec 
+			project: 'OsmoLogging' with: '1';
+			project: 'OsmoCrashReportClient' with: '4';
+			project: 'RFB' with: '0.63'.
+		spec package: #OsmoCore with: 'OsmoCore-HolgerHansPeterFreyther.40'. ].
+
+]
