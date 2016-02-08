@@ -132,7 +132,7 @@ ConfigurationOfOsmoCore >> baseline01: spec [
 					versionString: #'stable';
 					repository: 'http://smalltalkhub.com/mc/PharoExtras/RFB/main/' ].
 		spec package: #OsmoCore with: [
-				spec requires: #('OsmoLogging' ). ].
+				spec requires: #('OsmoLogging' 'OsmoCrashReportClient' ). ].
 		spec group: 'default' with: #(#OsmoCore #RFB 'OsmoCrashReportClient' ). ].
 
 ]
