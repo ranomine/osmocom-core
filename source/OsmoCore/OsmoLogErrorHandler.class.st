@@ -15,4 +15,7 @@ OsmoLogErrorHandler >> handleError: anError on: block [
 	(self logManager contextValue: 'payload') ifNotNil: [:payload |
 		payload class = ByteArray ifTrue: [
 			anError logError: 'Payload hex: ', payload hex area: #core]].
+	(self logManager contextValue: 'json') ifNotNil: [:json |
+		(json isKindOf: String) ifTrue: [
+			anError logError: 'Json string ', json  area: #core]].
 ]
