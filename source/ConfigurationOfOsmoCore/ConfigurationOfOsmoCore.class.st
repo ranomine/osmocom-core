@@ -230,7 +230,7 @@ ConfigurationOfOsmoCore >> version2: spec [
 		spec author: 'HolgerHansPeterFreyther'.
 		spec timestamp: '10/20/2016 23:11'.
 		spec 
-			project: 'OsmoLogging' with: '2';
+			project: 'OsmoLogging' with: '3';
 			project: 'OsmoCrashReportClient' with: '4';
 			project: 'RFB' with: '0.63'.
 		spec package: #OsmoCore with: 'OsmoCore-HolgerHansPeterFreyther.40'. ].
