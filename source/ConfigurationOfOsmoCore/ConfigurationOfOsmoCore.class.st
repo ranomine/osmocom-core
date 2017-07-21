@@ -199,7 +199,7 @@ ConfigurationOfOsmoCore >> project [
 ConfigurationOfOsmoCore >> stable: spec [
 	<symbolicVersion: #'stable'>
 
-	spec for: #'common' version: '4'.
+	spec for: #'common' version: '5'.
 
 ]
 
@@ -254,19 +254,35 @@ ConfigurationOfOsmoCore >> version3: spec [
 
 ]
 
-{ #category : #versions }
+{ #category : #'as yet unclassified' }
 ConfigurationOfOsmoCore >> version4: spec [
 	<version: '4' imports: #('0.1-baseline' )>
 
 	spec for: #'common' do: [
 		spec blessing: #'stable'.
-		spec description: 'version 3'.
+		spec description: 'version 4'.
 		spec author: 'HolgerHansPeterFreyther'.
-		spec timestamp: '07/21/2017 09:20'.
+		spec timestamp: '06/05/2017 18:25'.
 		spec 
-			project: 'OsmoLogging' with: '4';
+			project: 'OsmoLogging' with: '5';
+			project: 'OsmoCrashReportClient' with: '4';
+			project: 'RFB' with: '0.63'.
+		spec package: #OsmoCore with: 'OsmoCore-HolgerHansPeterFreyther.43'. ].
+
+]
+
+{ #category : #versions }
+ConfigurationOfOsmoCore >> version5: spec [
+	<version: '5' imports: #('0.1-baseline' )>
+
+	spec for: #'common' do: [
+		spec blessing: #'stable'.
+		spec description: 'version 5'.
+		spec author: 'HolgerHansPeterFreyther'.
+		spec timestamp: '07/21/2017 09:23'.
+		spec 
+			project: 'OsmoLogging' with: '5';
 			project: 'OsmoCrashReportClient' with: '4';
 			project: 'RFB' with: '0.65'.
 		spec package: #OsmoCore with: 'OsmoCore-HolgerHansPeterFreyther.43'. ].
-
 ]
