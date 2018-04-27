@@ -286,3 +286,19 @@ ConfigurationOfOsmoCore >> version5: spec [
 			project: 'RFB' with: '0.65'.
 		spec package: #OsmoCore with: 'OsmoCore-HolgerHansPeterFreyther.43'. ].
 ]
+
+{ #category : #versions }
+ConfigurationOfOsmoCore >> version6: spec [
+	<version: '6' imports: #('0.1-baseline' )>
+
+	spec for: #'common' do: [
+		spec blessing: #'stable'.
+		spec description: 'version 6'.
+		spec author: 'HolgerHansPeterFreyther'.
+		spec timestamp: '04/27/2018 22:12'.
+		spec 
+			project: 'OsmoLogging' with: '5';
+			project: 'OsmoCrashReportClient' with: '4';
+			project: 'RFB' with: '0.65'.
+		spec package: #OsmoCore with: 'OsmoCore-HolgerHansPeterFreyther.44'. ].
+]
