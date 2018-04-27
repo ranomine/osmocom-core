@@ -52,13 +52,24 @@ TimerScheduler class >> processName [
 
 { #category : #'as yet unclassified' }
 TimerScheduler class >> shutDown: quitting [
+	"This is for up-to Pharo6.0"
 	Smalltalk at: #OsmoTimeScheduler ifPresent: [:timer | timer doShutDown]
 
 ]
 
 { #category : #'as yet unclassified' }
 TimerScheduler class >> startUp [
+	"This is for up-to Pharo6.0"
 	Smalltalk at: #OsmoTimeScheduler ifPresent: [:timer | timer doStartUp]
+
+]
+
+{ #category : #'as yet unclassified' }
+TimerScheduler class >> startUp: resuming [
+	"This is for Pharo7.0 and beyond"
+	Smalltalk at: #OsmoTimeScheduler ifPresent: [:timer |
+		resuming ifTrue: [ timer doShutDown ].
+		timer doStartUp]
 
 ]
 
