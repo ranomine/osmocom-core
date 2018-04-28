@@ -68,8 +68,10 @@ TimerScheduler class >> startUp [
 TimerScheduler class >> startUp: resuming [
 	"This is for Pharo7.0 and beyond"
 	Smalltalk at: #OsmoTimeScheduler ifPresent: [:timer |
-		resuming ifTrue: [ timer doShutDown ].
-		timer doStartUp]
+		resuming ifTrue: [
+			timer
+				doShutDown;
+				doStartUp]].
 
 ]
 
