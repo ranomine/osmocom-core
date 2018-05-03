@@ -300,5 +300,5 @@ ConfigurationOfOsmoCore >> version6: spec [
 			project: 'OsmoLogging' with: '5';
 			project: 'OsmoCrashReportClient' with: '4';
 			project: 'RFB' with: '0.65'.
-		spec package: #OsmoCore with: 'OsmoCore-HolgerHansPeterFreyther.45'. ].
+		spec package: #OsmoCore with: 'OsmoCore-HolgerHansPeterFreyther.46'. ].
 ]
