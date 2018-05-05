@@ -24,7 +24,6 @@ Class {
 TimerScheduler class >> initialize [
 	"Pharo requires us to do some post-processing"
 	Smalltalk addToStartUpList: self.
-	Smalltalk addToShutDownList: self.
 	^self instance
 
 ]
@@ -51,13 +50,6 @@ TimerScheduler class >> processName [
 ]
 
 { #category : #'as yet unclassified' }
-TimerScheduler class >> shutDown: quitting [
-	"This is for up-to Pharo6.0"
-	Smalltalk at: #OsmoTimeScheduler ifPresent: [:timer | timer doShutDown]
-
-]
-
-{ #category : #'as yet unclassified' }
 TimerScheduler class >> startUp [
 	"This is for up-to Pharo6.0"
 	Smalltalk at: #OsmoTimeScheduler ifPresent: [:timer | timer doStartUp]
@@ -68,9 +60,7 @@ TimerScheduler class >> startUp [
 TimerScheduler class >> startUp: resuming [
 	"This is for Pharo7.0 and beyond"
 	Smalltalk at: #OsmoTimeScheduler ifPresent: [:timer |
-			timer
-				doShutDown;
-				doStartUp].
+		timer doStartUp].
 
 ]
 
@@ -90,7 +80,7 @@ TimerScheduler >> doShutDown [
 	loop ifNil: [^self].
 	quit := true.
 	sem critical: [loopSem ifNotNil: [loopSem signal]].
-	self signalWaitingProcessOf: delay.
+	self signalDelay.
 	processExited wait.
 	Transcript
 	    nextPutAll: 'Stopped the TimerScheduler process';
@@ -100,13 +90,7 @@ TimerScheduler >> doShutDown [
 
 { #category : #PharoHacks }
 TimerScheduler >> doStartUp [
-	loop ifNotNil: [^self error: 'The loop should have vanished'].
-	Transcript
-	    nextPutAll: 'Starting the TimerScheduler loop again';
-	    cr.
-	quit := false.
-	self startLoop
-
+	self signalDelay
 ]
 
 { #category : #'as yet unclassified' }
@@ -149,15 +133,14 @@ TimerScheduler >> runTimers [
 		[| timer |
 		sem critical: 
 			[queue isEmpty ifFalse: [timer := queue first].
-			loopSem := Semaphore new].
+			loopSem := Semaphore new.
+			delay := nil.].
 		timer isNil 
 		    ifTrue: 
 			["nothing to do. No need to poll an empty queue. Remove delay to get rid of
 			 a false resumptionTime. Suspend the process. The process will be resumed
 			 when an item is added. Please note that Processor activeProcess == loop will
 			 hold here."
-
-			delay := nil.
 			loopSem wait]
 		    ifFalse: 
 			["either a timer has expired and we process it or we wait for the first item in
@@ -199,20 +182,7 @@ TimerScheduler >> scheduleInSeconds: aNumber block: aBlock [
 
 { #category : #'as yet unclassified' }
 TimerScheduler >> signalDelay [
-	"Called with sem critical being consumed"
-
-	self signalWaitingProcessOf: delay
-]
-
-{ #category : #PharoHacks }
-TimerScheduler >> signalWaitingProcessOf: aDelay [
-	"process signalling process of the delay. Try to figure out which method to call for. The
-	selector has changed between pharo3 and pharo4"
-	aDelay ifNil: [ ^ self ].
-	
-	(aDelay respondsTo: #signalWaitingProcess)
-		ifTrue: [  aDelay signalWaitingProcess ]
-		ifFalse: [ aDelay schedulerSignalWaitingProcess ]
+	delay ifNotNil: [:aDelay | aDelay delaySemaphore signal ].
 ]
 
 { #category : #creation }
