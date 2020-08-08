@@ -6,7 +6,7 @@ Class {
 
 { #category : #'accessing platform' }
 LibCrypto >> macModuleName [
-	^'libcrypto.dylib'
+	^'/usr/lib/libcrypto.dylib'
 ]
 
 { #category : #'accessing platform' }
