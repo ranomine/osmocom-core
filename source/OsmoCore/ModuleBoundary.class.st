@@ -20,6 +20,11 @@ ModuleBoundary class >> addErrorHandler: anErrorHandler [
 ]
 
 { #category : #'as yet unclassified' }
+ModuleBoundary class >> handleError: anError [
+	errorHandlers do: [ :each | each handleError: anError on: nil ]
+]
+
+{ #category : #'as yet unclassified' }
 ModuleBoundary class >> initialize [
 	errorHandlers := OrderedCollection with: OsmoLogErrorHandler new.
 ]
