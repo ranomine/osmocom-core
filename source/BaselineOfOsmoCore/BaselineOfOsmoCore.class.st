@@ -14,7 +14,7 @@ BaselineOfOsmoCore >> baseline: spec [
 			repository: 'github://ranomine/osmocom-logging:v8/source'].
 	spec baseline: 'OsmoCrashReportClient' with: [
 		spec
-			repository: 'github://moiji-mobile/osmocom-crashreport:v7/source'].
+			repository: 'github://ranomine/osmocom-crashreport:repository-change/source'].
 
 	spec package: #OsmoCore with: [
 		spec requires: #('OsmoLogging' 'OsmoCrashReportClient')].
